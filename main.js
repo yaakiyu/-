@@ -23,8 +23,7 @@ jishoBot.parameter.prefix = /^db=/i;
 
 jishoBot.parameter.dictionary = [
   //辞書
-  { word: "help", mean: "ヘルプは現在作成中です。\n作成者：yaakiyu" },
-  { word: "ヘルプ", mean: "ヘルプは現在作成中です。\n作成者：yaakiyu" },
+  { word: "ヘルプ|help", mean: "ヘルプは現在作成中です。\n作成者：yaakiyu" },
   { word: "辞書", mean: "辞書です。" },
   { word: "NSFW", mean: "辞書です。" },
   { word: "脳漿炸裂ガール", mean: "「脳漿炸裂ガール」は、れるりりが作ったボーカロイド曲である。"},
