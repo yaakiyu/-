@@ -19,7 +19,7 @@ console.log('準備完了');
 const Embed = new discord.MessageEmbed();
 const jishoBot = new Object();
 jishoBot.parameter = new Object();
-jishoBot.parameter.prefix = /^db=/i; 
+jishoBot.parameter.prefix = /^db[:=]:|^&/i; 
 
 jishoBot.parameter.dictionary = [
   //辞書
