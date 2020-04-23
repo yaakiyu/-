@@ -25,7 +25,7 @@ jishoBot.parameter.dictionary = [
   //辞書
   { word: "ヘルプ|help", mean: "ヘルプは現在作成中です。\n作成者：yaakiyu" },
   { word: "辞書", mean: "辞書です。" },
-  { word: "NSFW", mean: "辞書です。" },
+  { word: "NSFW", mean: "" },
   { word: "脳漿炸裂ガール", mean: "「脳漿炸裂ガール」は、れるりりが作ったボーカロイド曲である。"},
   { word: "wikipedia", mean: "ウィキペディアは、フリーなインターネット辞書である。" }
 ];
@@ -52,14 +52,14 @@ jishoBot.parameter.elseMessage = word => {
   return Embed.setColor(0xa103fc)
     .setTitle("すみません...")
     .setDescription(`${word}が見つかりませんでした。 `)
-    .setFooter("目次：db:目次\nヘルプ：db:help");
+    .setFooter("目次：db:s目次\nヘルプ：db:help");
 };
 jishoBot.Run = () => {
   jishoBot.functions.getMokuji();
   client.on("message", message => {
     const start = jishoBot.parameter.prefix;
-    let content = message.content;
-    let channel = message.channel;
+    let content = message.content;//
+    let channel = message.channel;//
     if (!message.author.bot && content.match(start)) {
       const elseMessage = jishoBot.parameter.elseMessage;
       const dictionary = jishoBot.parameter.dictionary;
