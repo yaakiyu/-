@@ -19,11 +19,13 @@ console.log('準備完了');
 const Embed = new discord.MessageEmbed();
 const jishoBot = new Object();
 jishoBot.parameter = new Object();
-jishoBot.parameter.prefix = /^db:|^[&＆]/i; 
+jishoBot.parameter = {
+prefix : /^db:|^[&＆]/i, 
+};
 
 jishoBot.parameter.dictionary = [
   //辞書
-  { word: "ヘルプ|help", mean: "このボットでは、主にdiscordで使われる用語などを検索できます。\nまた、それ以外の言葉も一部対応しています。\n目次を見たい場合は、db:s目次を参照してください。\n作成者：yaakiyu" },
+  { word: "ヘルプ|help", mean: "このボットでは、主にdiscordで使われる用語などを検索できます。\nまた、それ以外の言葉も一部対応しています。\nこのボットの先頭には、`db:`が必要です。\n目次を見たい場合は、db:s目次を参照してください。\n作成者：yaakiyu" },
   { word: "辞書", mean: "辞書は、このBotのように大量の語句が収録されているものである。" },
   { word: "Bot|ボット", mean: "ボット（Bot）は、人間に代わって作業を行うコンピュータープログラムの総称。語源は人に代わって作業を行う機械「ロボット(ROBOT)」から。" },
   { word: "グローバルチャット", mean: "グローバルチャットは、Botを使うことによって別のサーバーの人とのやり取りをするためのもの。現在このBotではサポートされていない。" },
@@ -66,6 +68,17 @@ jishoBot.Run = () => {
       const elseMessage = jishoBot.parameter.elseMessage;
       const dictionary = jishoBot.parameter.dictionary;
       let search = content.replace(start, "");
+      if (search == "about") {
+        channel.send(
+          Embed
+          .setDescription("説明")
+          .setColor(0xffd700)
+          .setTitle("このボットについて")
+          .addField("つかれた")
+          .setTimestamp(new Date)
+        );
+        return;
+      }
       for (let item of dictionary) {
         const embedColor = jishoBot.parameter.embedColor;
         const embedFooter = jishoBot.parameter.embedFooter;
