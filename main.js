@@ -16,7 +16,6 @@ client.user.setActivity("ヘルプはdb:help");
 console.log('準備完了');
 });
 
-const Embed = new discord.MessageEmbed();
 const jishoBot = new Object();
 jishoBot.parameter = new Object();
 jishoBot.parameter = {
@@ -37,7 +36,8 @@ jishoBot.parameter.dictionary = [
 jishoBot.parameter.embedColor = 0x42f5f5;
 jishoBot.parameter.embedFooter = "ご利用いただきありがとうございます。";
 jishoBot.parameter.sendMessage = (word, color, descrip, foot) => {
-  return Embed.setColor(color)
+  let embed = new discord.MessageEmbed();
+  return embed.setColor(color)
     .setTitle(`"${word}"`)
     .setDescription(descrip)
     .setFooter(foot);
@@ -53,7 +53,8 @@ jishoBot.functions.getMokuji = () => {
 };
 
 jishoBot.parameter.elseMessage = word => {
-  return Embed.setColor(0xa103fc)
+  let embed = new discord.MessageEmbed();
+  return embed.setColor(0xa103fc)
     .setTitle("すみません...")
     .setDescription(`${word}が見つかりませんでした。 `)
     .setFooter("目次：db:s目次\nヘルプ：db:help");
@@ -69,8 +70,9 @@ jishoBot.Run = () => {
       const dictionary = jishoBot.parameter.dictionary;
       let search = content.replace(start, "");
       if (search == "about") {
+        let embed = new discord.MessageEmbed();
         channel.send(
-          Object.assign({}, Embed)
+          Object.set({}, embed)
           .setColor(0xffd700)
           .setDescription("このBotは2020/04/22に作成されました。")
           .setTitle("このボットについて")
