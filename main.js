@@ -24,7 +24,7 @@ prefix : /^db:|^[&＆]/i,
 
 jishoBot.parameter.dictionary = [
   //辞書
-  { word: "ヘルプ|help", mean: "このボットでは、主にdiscordで使われる用語などを検索できます。\nまた、それ以外の言葉も一部対応しています。\nこのボットの先頭には、`db:`が必要です。\n目次を見たい場合は、db:s目次を参照してください。\n作成者：yaakiyu" },
+  { word: "ヘルプ|help", mean: "このボットでは、主にdiscordで使われる用語などを検索できます。\nまた、それ以外の言葉も一部対応しています。\nこのボットの先頭には、`db:`が必要です。\n目次を見たい場合は、db:s目次を参照してください。\nまた、`db:about`でこのボットについて見ることができます。\n作成者：yaakiyu" },
   { word: "辞書", mean: "辞書は、このBotのように大量の語句が収録されているものである。" },
   { word: "Bot|ボット", mean: "ボット（Bot）は、人間に代わって作業を行うコンピュータープログラムの総称。語源は人に代わって作業を行う機械「ロボット(ROBOT)」から。" },
   { word: "グローバルチャット", mean: "グローバルチャットは、Botを使うことによって別のサーバーの人とのやり取りをするためのもの。現在このBotではサポートされていない。" },
@@ -72,12 +72,12 @@ jishoBot.Run = () => {
       if (search == "about") {
         let embed = new discord.MessageEmbed();
         channel.send(
-          Object.set({}, embed)
+          embed
           .setColor(0xffd700)
           .setDescription("このBotは2020/04/22に作成されました。")
           .setTitle("このボットについて")
           .addField("作成者","このボットはすべて <@693025129806037003> が一人で作成しています。")
-          .addField("Bot version","1.0(Build 10003)")
+          .addField("Bot version","1.0(Build 10004)")
           .addField("最終更新（大規模アップデート時のみ）","2020/04/24 10:57:54")
           .setTimestamp(new Date)
         );
