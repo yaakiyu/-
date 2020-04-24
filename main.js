@@ -12,22 +12,24 @@ const client = new discord.Client();
 
 client.on('ready', message =>
 {
-client.user.setPresence({ game: { name: 'ヘルプはdb:help' } });  
+client.user.setActivity("ヘルプはdb:help");  
 console.log('準備完了');
 });
 
 const Embed = new discord.MessageEmbed();
 const jishoBot = new Object();
 jishoBot.parameter = new Object();
-jishoBot.parameter.prefix = /^db[:=]:|^&/i; 
+jishoBot.parameter.prefix = /^db:|^[&＆]/i; 
 
 jishoBot.parameter.dictionary = [
   //辞書
-  { word: "ヘルプ|help", mean: "ヘルプは現在作成中です。\n作成者：yaakiyu" },
-  { word: "辞書", mean: "辞書です。" },
-  { word: "NSFW", mean: "" },
+  { word: "ヘルプ|help", mean: "このボットでは、主にdiscordで使われる用語などを検索できます。\nまた、それ以外の言葉も一部対応しています。\n目次を見たい場合は、db:s目次を参照してください。\n作成者：yaakiyu" },
+  { word: "辞書", mean: "辞書は、このBotのように大量の語句が収録されているものである。" },
+  { word: "Bot|ボット", mean: "ボット（Bot）は、人間に代わって作業を行うコンピュータープログラムの総称。語源は人に代わって作業を行う機械「ロボット(ROBOT)」から。" },
+  { word: "グローバルチャット", mean: "グローバルチャットは、Botを使うことによって別のサーバーの人とのやり取りをするためのもの。現在このBotではサポートされていない。" },
+  { word: "NSFW", mean: "NSFWは、Not safe for work（ノット・セーフ・フォー・ワーク）の頭字語で、職場や学校などのフォーマルな環境下での閲覧に注意を促すために、裸、ポルノグラフィ、卑語、暴力などの要素を含む動画やウェブサイトのURLやハイパーリンクを示す際に使われるインターネットスラング。\nNSFWは、性的コンテンツへのアクセスを禁止している職場や学校内で、個人的にインターネットを使う人物に特に関係がある。(Wikipediaより)" },
   { word: "脳漿炸裂ガール", mean: "「脳漿炸裂ガール」は、れるりりが作ったボーカロイド曲である。"},
-  { word: "wikipedia", mean: "ウィキペディアは、フリーなインターネット辞書である。" }
+  { word: "wikipedia", mean: "「ウィキペディア」は、フリーなインターネット辞書である。" }
 ];
 
 jishoBot.parameter.embedColor = 0x42f5f5;
@@ -39,7 +41,7 @@ jishoBot.parameter.sendMessage = (word, color, descrip, foot) => {
     .setFooter(foot);
 };
 jishoBot.functions = new Object();
-
+//目次を入手する
 jishoBot.functions.getMokuji = () => {
   let mokuji = "";
   for (let content of jishoBot.parameter.dictionary) {
@@ -90,7 +92,6 @@ jishoBot.Run = () => {
   });
 };
 jishoBot.Run();
-
 if(process.env.DISCORD_BOT_TOKEN == undefined)
 {
 	console.log('please set ENV: DISCORD_BOT_TOKEN');
