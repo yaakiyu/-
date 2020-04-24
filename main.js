@@ -70,12 +70,12 @@ jishoBot.Run = () => {
       let search = content.replace(start, "");
       if (search == "about") {
         channel.send(
-          Embed
+          Object.assign({}, Embed)
           .setColor(0xffd700)
           .setDescription("このBotは2020/04/22に作成されました。")
           .setTitle("このボットについて")
           .addField("作成者","このボットはすべて <@693025129806037003> が一人で作成しています。")
-          .addField("Bot version","1.0(Build 10002)")
+          .addField("Bot version","1.0(Build 10003)")
           .addField("最終更新（大規模アップデート時のみ）","2020/04/24 10:57:54")
           .setTimestamp(new Date)
         );
