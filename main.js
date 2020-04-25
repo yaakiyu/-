@@ -29,12 +29,12 @@ Bot.functions.getAdminID = () => {
 //::起動:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Client.on("ready", message => {
   console.log("準備完了");
+  log(0, "**Bot is ready!**");
   Bot.Run();
 });
 //::実行:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Bot.Run = () => {
   Client.user.setActivity("ヘルプはdb:help");
-  Client.users.cache.get(Bot.functions.getAdminID()).send("起動しました");
   jishoBot.Preparation();
   Client.on("message", message => {
     jishoBot.Run(message);
@@ -51,7 +51,7 @@ jishoBot.parameter.dictionary = [
   {
     word: "ヘルプ|help",
     mean:
-      "このボットでは、主にdiscordで使われる用語などを検索できます。\nまた、それ以外の言葉も一部対応しています。\nこのボットの先頭には、`db:`が必要です。\n目次を見たい場合は、db:s目次を参照してください。\nまた、`db:about`でこのボットについて見ることができます。\n作成者：yaakiyu"
+      "このボットでは、主にdiscordで使われる用語などを検索できます。\nまた、それ以外の言葉も一部対応しています。\nこのボットの先頭には、「`db:`」が必要です。\n目次を見たい場合は、db:s目次を参照してください。\nまた、`db:about`でこのボットについて見ることができます。\n作成者：yaakiyu"
   },
   {
     word: "辞書",
@@ -77,6 +77,19 @@ jishoBot.parameter.dictionary = [
     mean: "「脳漿炸裂ガール」は、れるりりが作ったボーカロイド曲である。"
   },
   {
+    word: "TakuTukirou",
+    mean:
+      "takutukirouは、T-takuの開発した多機能Botである。グローバルチャットが使えるほか、ゲームなどの娯楽要素も存在する。公式サーバーあり。\n（以下は本人からの要望により招待リンクを掲載させていただく。）\nhttps://discordapp.com/api/oauth2/authorize?client_id=476012428170362880&permissions=2147347828&scope=bot"
+  },
+  {
+    word: "思惟奈ちゃん",
+    mean: ""
+  },
+  {
+    word: "佐藤　真美|佐藤真美",
+    mean: "「佐藤　真美」はjun50により開発された多機能Botである。主にボイスチャットでの機能が使えるが、「一文字ずつに☆を入れる」などの面白い機能も使える。公式サーバーあり。"
+  },
+  {
     word: "wikipedia",
     mean: "「ウィキペディア」は、フリーなインターネット辞書である。"
   }
@@ -95,8 +108,8 @@ jishoBot.parameter.about = () => {
       "作成者",
       "このボットはすべて <@693025129806037003> が一人で作成しています。"
     )
-    .addField("Bot version", "1.0(Build 10004)")
-    .addField("最終更新（大規模アップデート時のみ）", "2020/04/24 10:57:54")
+    .addField("Bot version", "1.0(Build 10007)")
+    .addField("最終更新（大規模アップデート時のみ）", "2020/04/24 17:20:32")
     .setTimestamp(new Date())
     .setFooter(jishoBot.parameter.embedFooter);
 };
@@ -174,6 +187,42 @@ jishoBot.Run = message => {
     }
   }
 };
+function log(channelNamber) {
+  const all_logChannelID = "703130633857400895";//起動通知がされるチャンネルID
+  const logChannelIDs = ["703133557769502741"];
+
+  let content = "";
+  let index = 0;
+  for (let arg of arguments) {
+    if (index >= 1) {
+      content += "  " + arg;
+    }
+    index++;
+  }
+  if (channelNamber != 0) {
+    send(
+      all_logChannelID,
+      content +
+        " " +
+        Client.channels.cache.get(logChannelIDs[channelNamber - 1]).toString()
+    );
+    return send(logChannelIDs[channelNamber - 1], content);
+  } else {
+    send(all_logChannelID, content);
+  }
+}
+
+function send(channelid, content) {
+  return new Promise(function(resolve, reject) {
+    Client.channels.cache
+      .filter(channel => channel.id == channelid)
+      .forEach(channel => {
+        channel.send(content).then(message => {
+          resolve(message);
+        });
+      });
+  });
+}
 //############################################################################################################################
 
 if (process.env.DISCORD_BOT_TOKEN == undefined) {
