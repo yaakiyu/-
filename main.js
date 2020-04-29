@@ -120,7 +120,7 @@ NSFWは、性的コンテンツへのアクセスを禁止している職場や�
 
 jishoBot.parameter.embedColor = 0x42f5f5;
 jishoBot.parameter.embedFooter = "ご利用いただきありがとうございます。";
-
+jishoBot.parameter.inProductionMessage = "<この項目は只今執筆中です...>";
 jishoBot.parameter.about = () => {
   let embed = new Discord.MessageEmbed();
   return embed
@@ -129,10 +129,10 @@ jishoBot.parameter.about = () => {
     .setDescription("このBotは2020/04/22に作成されました。")
     .addField(
       "作成者",
-      "このボットはすべて <@693025129806037003> が一人で作成しています。"
+      "このボットは <@693025129806037003> などが協力して作成しています。"
     )
-    .addField("Bot version", "1.0(Build 10007)")
-    .addField("最終更新（大規模アップデート時のみ）", "2020/04/24 17:20:32")
+    .addField("Bot version", "0.7(Build 07010)")
+    .addField("最終更新（大規模アップデート時のみ）", "2020/04/29 20:37:54")
     .setTimestamp(new Date())
     .setFooter(jishoBot.parameter.embedFooter);
 };
@@ -163,7 +163,7 @@ jishoBot.functions.getMokuji = () => {
     mokuji += content.word + "\n";
   }
   jishoBot.parameter.dictionary.push({
-    word: "s目次",
+    word: "s-目次",
     mean: `現在載っている言葉：\n ${mokuji}`
   });
 };
@@ -176,14 +176,30 @@ jishoBot.Preparation = () => {
 //**本体**********************************************************************************************
 jishoBot.Run = message => {
   const prefix = jishoBot.parameter.prefix;
-  let content = message.content;
-  let channel = message.channel;
-  if (!message.author.bot && content.match(prefix)) {
+  const content = message.content;
+  const channel = message.channel;
+  if (content.match(prefix)) {
+    let guild;
+    let nickname;
+    if (message.channel.type == "dm") {
+      guild = "DM";
+      nickname = null;
+    } else {
+      guild = message.guild.name;
+      nickname = message.member.nickname;
+    }
+    const author = message.author;
     const elseMessage = jishoBot.parameter.elseMessage;
     const dictionary = jishoBot.parameter.dictionary;
     let search = content.replace(prefix, "");
     if (search == "about") {
       channel.send(jishoBot.parameter.about());
+      log(
+        1,
+        `**Show about**   Server:[${guild}]  Channel:[${channel.toString()}]  User:[${
+          author.username
+        } (${nickname})]`
+      );
       return;
     }
     for (let item of dictionary) {
@@ -191,6 +207,17 @@ jishoBot.Run = message => {
       const embedFooter = jishoBot.parameter.embedFooter;
       let reg = new RegExp(`^${item.word}`, "i");
       if (search.match(reg)) {
+        if (item.mean == "" || item.writing) {
+          channel.send(
+            jishoBot.parameter.sendMessage(
+              search,
+              embedColor,
+              jishoBot.parameter.inProductionMessage,
+              embedFooter
+            )
+          );
+          return;
+        }
         channel.send(
           jishoBot.parameter.sendMessage(
             search,
@@ -199,20 +226,35 @@ jishoBot.Run = message => {
             embedFooter
           )
         );
+        log(
+          1,
+          `**Searched**   Status:[hit]  Word:[${search}]  Server:[${guild}]  Channel:[${channel.toString()}]  User:[${
+            author.username
+          } (${nickname})]`
+        );
         return;
       }
     }
     if (!search == "") {
       channel.send(elseMessage(search));
-      channel.guild.members.cache
+      Client.users.cache
         .get(Bot.functions.getAdminID())
-        .send(`存在しない言葉「${search}」が検索されました`); //報告
+        .send(
+          `存在しない言葉「${search}」が検索されました。 by ${author.username}`
+        );
+      log(
+        1,
+        `**Searched**  Status:[Couldn't hit]]  Word:[${search}]  Server:[${guild}]  Channel:[${channel.toString()}]  User:[${
+          author.username
+        } (${nickname})]`
+      );
+      log(2,`**Item addition request**\nWords not found in the dictionary "${search}" have been serched.\nIf it isn't an inappropriate word,please add it.`)
     }
   }
 };
 function log(channelNamber) {
-  const all_logChannelID = "703130633857400895";//起動通知がされるチャンネルID
-  const logChannelIDs = ["703133557769502741"];
+  const all_logChannelID = "703130633857400895"; //起動通知がされるチャンネルID
+  const logChannelIDs = ["703133557769502741","705013092618076201"];
 
   let content = "";
   let index = 0;
