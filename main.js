@@ -11,10 +11,9 @@ const Discord = require("discord.js");
 const Client = new Discord.Client();
 exports.Clirnt = Client;
 
-const dicBot = require('./dicBot.js');
-const functions = require('./functions.js');
-const log = functions.log
-
+const dicBot = require("./dicBot.js");
+const functions = require("./functions.js");
+const log = functions.log;
 //::実行::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 //##bot#######################################################################################################################
 const Bot = new (class {
@@ -24,33 +23,33 @@ const Bot = new (class {
       adminName: "yaakiyu",
       userIDs: {
         yaakiyu: "693025129806037003",
-        uni: "687599949093011495"
+        uni: "687599949093011495",
+        Takkun: "667319675176091659"
       },
       saverConfigID: "705035857102503997"
     };
-    
     this.database = {
       system: null,
       user: null,
       variable: null
     };
-    
+
     this.functions = new (class {
       getAdminID() {
         return Bot.parameter.userIDs[Bot.parameter.adminName];
       }
       getDataID(type) {
         return new Promise((resolve, reject) => {
-          functions.fetchMessages(Bot.parameter.saverConfigID, { limit: 1 }).then(
-            messages => {
+          functions
+            .fetchMessages(Bot.parameter.saverConfigID, { limit: 1 })
+            .then(messages => {
               resolve(JSON.parse(messages.first().content).databaseIDs[type]);
-            }
-          );
+            });
         });
       }
     })();
   }
-  
+
   readDatabase() {
     let setDataFunctions = [];
     for (let key of Object.keys(this.database)) {
@@ -72,6 +71,8 @@ const Bot = new (class {
     return Promise.all(setDataPromise);
   }
   Preparation() {
+    deepFreeze(this.parameter);
+
     return this.readDatabase();
   }
   //::実行:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
@@ -90,7 +91,8 @@ const Bot = new (class {
 //::起動:::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::::
 Client.on("ready", message => {
   Bot.Preparation().then(() => {
-    module.exports.database = Bot.database
+    module.exports.database = Bot.database;
+    module.exports.parameter = Bot.parameter;
     console.log("準備完了");
     log(0, "**Bot is ready!**");
     //getLastMessage("703133624567988244");
@@ -98,6 +100,21 @@ Client.on("ready", message => {
     Bot.Run();
   });
 });
+
+function deepFreeze(o) {
+  var prop, propKey;
+  Object.freeze(o);
+  for (propKey in o) {
+    prop = o[propKey];
+    if (
+      o.hasOwnProperty(propKey) &&
+      prop instanceof Object &&
+      !Object.isFrozen(prop)
+    ) {
+      deepFreeze(prop);
+    }
+  }
+}
 
 if (process.env.DISCORD_BOT_TOKEN == undefined) {
   console.log("please set ENV: DISCORD_BOT_TOKEN");
